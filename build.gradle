@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+    id 'jacoco'
+    id 'info.solidsoft.pitest' version '1.4.0'
+}
+
+group 'java_mutation_tests'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        html.enabled true
+    }
+    executionData = files("$buildDir/jacoco/test.exec")
+}
+
+pitest {
+    targetClasses = ['Cart*']
+    threads = 4
+    outputFormats = ['XML', 'HTML']
+    timestampedReports = false
+    verbose = true
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+test {
+    finalizedBy jacocoTestReport
+}
